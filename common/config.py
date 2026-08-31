@@ -1,0 +1,9 @@
+MQTT_BROKER = "192.168.100.24"
+MQTT_PORT = 1883
+MQTT_KEEPALIVE = 60
+
+#TOPICS
+TOPIC_VIDEO_STREAM = "cubecount/stream/video"
+TOPIC_TELEMETRY = "cubecount/telemetry"
+
+JPEG_QUALITY = 60
