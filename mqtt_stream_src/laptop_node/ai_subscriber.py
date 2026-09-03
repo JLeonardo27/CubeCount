@@ -43,7 +43,8 @@ def main():
             if subscriber.frame_to_process is not None:
                 frame = subscriber.frame_to_process.copy()
                 subscriber.frame_to_process = None 
-
+                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                
                 cv2.imshow('Estacion Terrena - Recoleccion de Datos', frame)
 
             key = cv2.waitKey(1) & 0xFF
