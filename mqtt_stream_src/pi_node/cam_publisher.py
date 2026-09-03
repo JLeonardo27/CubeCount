@@ -25,7 +25,7 @@ def main():
     picam2 = Picamera2()
     
 
-    config = picam2.create_video_configuration({"main": {"format": "BGR888", "size": (320, 240)}})
+    config = picam2.create_video_configuration(main={"format": "BGR888", "size": (320, 240)})
     picam2.configure(config)
     picam2.start()
 
