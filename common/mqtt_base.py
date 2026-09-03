@@ -3,7 +3,7 @@ from common.config import MQTT_BROKER, MQTT_PORT, MQTT_KEEPALIVE
 
 class MQTTClientBase:
     def __init__(self, client_id):
-        self.client = mqtt.Client(client_id)
+	self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id)
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
 
