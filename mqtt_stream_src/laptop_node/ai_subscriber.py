@@ -32,37 +32,29 @@ class VideoSubscriber(MQTTClientBase):
             self.frame_to_process = decode_frame(msg.payload)
 
 def main():
-    # Inicializar el nodo usando el modelo entrenado
     subscriber = VideoSubscriber("Laptop_AI_Node", "best.pt")
     
-    print("Esperando video desde la Raspberry Pi Zero 2W. Presiona 'q' para salir.")
+    dataset_dir = "dataset_rubik"
+    os.makedirs(dataset_dir, exist_ok=True)
+    img_counter = 0
 
     try:
         while True:
-            # Si hay un fotograma nuevo en el buffer
             if subscriber.frame_to_process is not None:
-                # Copiar el frame y limpiar el buffer para no bloquear el hilo de red
                 frame = subscriber.frame_to_process.copy()
-                subscriber.frame_to_process = None
-                
-                resultados = subscriber.model(frame, verbose=False)
-                
-                conteo = len(resultados[0].boxes)
-                
-                frame_anotado = resultados[0].plot()
-                cv2.putText(frame_anotado, f'Cubos Rubik: {conteo}', (20, 40), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+                subscriber.frame_to_process = None 
 
-                cv2.imshow('Estacion Terrena - Procesamiento Hibrido', frame_anotado)
+                cv2.imshow('Estacion Terrena - Recoleccion de Datos', frame)
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            key = cv2.waitKey(1) & 0xFF
+            
+            if key == ord('q'):
                 break
-
-    except KeyboardInterrupt:
-        print("\nProcesamiento detenido por el usuario.")
-    finally:
-        cv2.destroyAllWindows()
-        subscriber.stop()
-
+            elif key == ord('s'):
+                img_name = os.path.join(dataset_dir, f"rubik_frame_{img_counter:04d}.jpg")
+                cv2.imwrite(img_name, frame)
+                print(f"Foto guardada: {img_name}")
+                img_counter += 1
+                
 if __name__ == "__main__":
     main()
