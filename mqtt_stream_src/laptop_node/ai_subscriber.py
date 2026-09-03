@@ -32,7 +32,7 @@ class VideoSubscriber(MQTTClientBase):
             self.frame_to_process = decode_frame(msg.payload)
 
 def main():
-    subscriber = VideoSubscriber("Laptop_AI_Node", "best.pt")
+    subscriber = VideoSubscriber("Laptop_AI_Node", "yolov8n.pt")
     
     dataset_dir = "dataset_rubik"
     os.makedirs(dataset_dir, exist_ok=True)
@@ -55,6 +55,12 @@ def main():
                 cv2.imwrite(img_name, frame)
                 print(f"Foto guardada: {img_name}")
                 img_counter += 1
+                
+    except KeyboardInterrupt:
+        print("\nRecolección detenida por el usuario.")
+    finally:
+        cv2.destroyAllWindows()
+        subscriber.stop()
                 
 if __name__ == "__main__":
     main()
