@@ -5,12 +5,12 @@ echo    Iniciando Estacion Terrena
 echo ===============================
 echo.
 
-echo [1/2] Levantando el Broker MQTT (Mosquitto)...
+echo [1/2] Limpiando procesos fantasma y levantando Mosquitto
 
-start "Broker Mosquitto" cmd /k ""C:\Program Files\mosquitto\mosquitto.exe" -v"
+net stop mosquitto > NUL 2>&1
+taskkill /F /IM mosquitto.exe > NUL 2>&1
 
-
-timeout /t 2 /nobreak > NUL
+start "Broker Mosquitto" cmd /k ""C:\Program Files\mosquitto\mosquitto.exe" -v -c mosquitto.conf"
 
 echo [2/2] Iniciando el Motor de IA (YOLOv8)...
 
