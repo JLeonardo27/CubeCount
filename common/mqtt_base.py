@@ -3,7 +3,7 @@ from common.config import MQTT_BROKER, MQTT_PORT, MQTT_KEEPALIVE
 
 class MQTTClientBase:
     def __init__(self, client_id):
-	self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id)
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id)
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
 
@@ -19,7 +19,7 @@ class MQTTClientBase:
     def connect(self):
         try:
             self.client.connect(MQTT_BROKER, MQTT_PORT, MQTT_KEEPALIVE)
-            self.client.loop_start()
+            self.client.loop_start() 
         except Exception as e:
             print(f"Error al conectar con {MQTT_BROKER}: {e}")
 
