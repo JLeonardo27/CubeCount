@@ -22,17 +22,15 @@ class VideoSubscriber(MQTTClientBase):
     def on_connect(self, client, userdata, flags, rc):
         super().on_connect(client, userdata, flags, rc)
         if rc == 0:
-            # Suscripción con QoS 0 para evitar latencia de confirmación
             self.client.subscribe(TOPIC_VIDEO_STREAM, qos=0)
             print(f"Suscrito exitosamente al topic: {TOPIC_VIDEO_STREAM}")
 
     def on_message(self, client, userdata, msg):
         if msg.topic == TOPIC_VIDEO_STREAM:
-            # Descomprimir los bytes a un arreglo numpy/OpenCV
             self.frame_to_process = decode_frame(msg.payload)
 
 def main():
-    subscriber = VideoSubscriber("Laptop_AI_Node", "yolov8n.pt")
+    subscriber = VideoSubscriber("Laptop_AI_Node", "rubik_model.pt")
     
     dataset_dir = "dataset_rubik"
     os.makedirs(dataset_dir, exist_ok=True)
@@ -43,22 +41,28 @@ def main():
             if subscriber.frame_to_process is not None:
                 frame = subscriber.frame_to_process.copy()
                 subscriber.frame_to_process = None 
+                
+               
                 frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
                 
-                cv2.imshow('Estacion Terrena - Recoleccion de Datos', frame)
+                resultados = subscriber.model(frame, verbose=False)                
+                frame_anotado = resultados[0].plot()
+                cv2.imshow('Estacion Terrena - Inferencia YOLOv8', frame_anotado)
 
             key = cv2.waitKey(1) & 0xFF
             
             if key == ord('q'):
                 break
             elif key == ord('s'):
-                img_name = os.path.join(dataset_dir, f"rubik_frame_{img_counter:04d}.jpg")
-                cv2.imwrite(img_name, frame)
-                print(f"Foto guardada: {img_name}")
+                
+                img_name = os.path.join(dataset_dir, f"rubik_detectado_{img_counter:04d}.jpg")
+
+                cv2.imwrite(img_name, frame_anotado)
+                print(f"Foto de detección guardada: {img_name}")
                 img_counter += 1
                 
     except KeyboardInterrupt:
-        print("\nRecolección detenida por el usuario.")
+        print("\nInferencia detenida por el usuario.")
     finally:
         cv2.destroyAllWindows()
         subscriber.stop()
