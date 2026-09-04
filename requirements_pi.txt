@@ -1,0 +1,3 @@
+paho-mqtt==2.0.0
+# Nota: picamera2 no se instala vía pip. Ejecutar: 
+# sudo apt install python3-picamera2

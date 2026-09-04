@@ -1,0 +1,4 @@
+opencv-python>=4.9.0
+ultralytics>=8.1.0
+paho-mqtt==2.0.0
+numpy

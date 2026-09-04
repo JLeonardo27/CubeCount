@@ -1,8 +1,13 @@
-__pycache__/
-*.pyc
+# Entornos virtuales
+entorno_mqtt/
 venv/
 env/
-.env
-*.mp4
-*.avi
-*.jpg
+
+# Modelos base y datasets
+dataset_rubik/
+yolov8n.pt
+
+# Caché de Python y SO
+__pycache__/
+*.pyc
+.DS_Store
